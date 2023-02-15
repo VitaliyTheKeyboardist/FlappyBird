@@ -4,14 +4,14 @@ class DrawEngine {
 }
 
 class CanvasDrawEngine extends DrawEngine {
-    constructor({ canvas, ctx }) {
+    constructor({ canvas }) {
         super()
         this._canvas = canvas
-        this._ctx = ctx
+        this._ctx = canvas.getContext('2d') 
     }
     drawImage({ spriteSheet, image, x, y, width, height }) {
         super.drawImage({ spriteSheet, image, x, y, width, height })
-        this._canvas.drawImage(spriteSheet, image.x, image.y, image.w, image.h, x, y, width, height)
+        this._ctx.drawImage(spriteSheet, image.x, image.y, image.w, image.h, x, y, width, height)
     }
 
     clear() {

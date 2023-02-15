@@ -9,7 +9,7 @@ class Game {
     this.width = this._config.canvas.width
     this.height = this._config.canvas.height
 
-    this._drawEngine = new CanvasDrawEngine({ canvas: this._canvas, ctx: this._ctx})
+    this._drawEngine = new CanvasDrawEngine({ canvas: this._canvas })
     this._physicsEngine = new PhysicsEngine({ gravity: this._config.gravity})
     this._resourceLoader = new ResourceLoader()
     this._inputHandler = new MouseInputHandler({
@@ -19,12 +19,18 @@ class Game {
     })
   }
   async prepare() {
-    this._spriteSheet = this._resourceLoader.load({
-      type: RESOURCE_TYPE.IMAGE,
-      src: this._config.spriteSheet.src,
-      width: this._config.spriteSheet.width,
-      height: this._config.spriteSheet.height,
-    })
+    const image = new Image()
+    image.width = this._config.spriteSheet.width
+    image.height = this._config.spriteSheet.height
+    image.src = this._config.spriteSheet.src
+    this._spriteSheet = image
+    // this._spriteSheet = this._resourceLoader.load({
+    //   type: RESOURCE_TYPE.IMAGE,
+    //   src: this._config.spriteSheet.src,
+    //   width: this._config.spriteSheet.width,
+    //   height: this._config.spriteSheet.height,
+    // })
+    console.log(this._spriteSheet)
   }
 
   reset() {
@@ -43,8 +49,8 @@ class Game {
     })
   }
 
-  update() {
-    this._bird.update()
+  update(delta) {
+    this._bird.update(delta)
   }
 
   draw() {
@@ -53,23 +59,31 @@ class Game {
 
   _loop() {
     const now = Date.now()
-    const delta = this._lastUpdate - now
-    this.reset()
-    this.update(delta)
-    this._drawEngine.clear()
-    this.draw()
+    
+    const delta = now - this._lastUpdate
+    // this.reset()
+    console.log(delta)
+    this.update(delta / 1000)
+    
+    if (this._playing) {
+      this._drawEngine.clear()
+      this.draw()
 
-    this._lastUpdate = now
+      this._lastUpdate = now
 
-    requestAnimationFrame(this.start.bind(this))
+      requestAnimationFrame(this._loop.bind(this))
+    }
   }
 
   start() {
+    this._playing = true
     this._inputHandler.subscribe()
     this._lastUpdate = Date.now()
+    this.reset()
     this._loop()
   }
   gameOver() {
+    this._playing = false
     alert(`Game over: ${this._score}`)
   }
 }

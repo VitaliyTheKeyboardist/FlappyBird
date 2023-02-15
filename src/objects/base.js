@@ -35,6 +35,7 @@ class Entity {
   }
   
   update(delta) {
-    this._frameIndex = (this._frameIndex + delta) % this._frames.length
+    this._frameIndex = (this._frameIndex + Math.ceil(delta)) % this._frames.length
+    // this._frameIndex = delta * 1000
   }
 }

@@ -8,12 +8,12 @@ class ResourceLoader {
             return new Promise((resolve, reject) => {
                 const image = new Image(width, height)
                 image.addEventListener('load', () => resolve(image))   
-                image.addEventListener('load', (error) => reject(error))
+                image.addEventListener('error', (error) => reject(error))
                 image.src = src
             })
-            
         }
     }
+    
 
     async load(resource) {
         const loader = this._typeLoadersMap[resource.type]

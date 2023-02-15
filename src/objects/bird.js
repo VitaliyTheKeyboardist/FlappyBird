@@ -1,5 +1,6 @@
 class Bird extends Entity {
   constructor(params) {
+    console.log(params)
     super(params)
     this._flapSpeed = params.flapSpeed
     this._physicsEngine = params.physicsEngine
